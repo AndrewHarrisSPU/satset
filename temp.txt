@@ -1,0 +1,45 @@
+## Reflection
+
+With:
+- *n*: number of graph vertices (one or two people)
+- *m*: number of groups
+
+### Minimum Iterations
+
+For minimum computational complexity, scheduling one host to serve all guests in *n/(group size)* weeks, and then another host, etc., leads to *O(mn)* makespans, but a low degree of computational complexity.
+
+For minimum makespan, consider naively constructing *n!* permutations of the list of members, and exploring all to combinatorially choices of *x* elements of the permutation set. Incrementing *x* until a solution is discovered finds an optimal solution, using a decision problem over an enumeration of cases, but not working in polynomial time.
+
+Using the m-by-n load balancing problem (Kleinberg and Tardos, pg. 600) as a starting point, we felt elements of the scheduling problem are at least analogous to an NP-Hard problem, but one with bounded approximation. We aim for _probably_ good makespan and polynomial time complexity.
+
+### Complexity: *O(n^2 log m)*
+
+Each week, our algorithm schedules in four serial phases:
+
+1. *O(n)* Hosts are selected from a member pool.
+
+2. *O(n log m)* Per remaining guest, a tree of host preferences is consulted, matching only for new edges.
+
+3. *O(n log m)* Per remaining guest, a priority queue of groups is consulted, matching to balance group size.
+
+4. *O(n)* Shuffle and re-enqueue the member pool.
+
+Data structures in phase 2 and 3 giving *O(log m)* access to hosts are built in *O(m log m)* time. Then, linearly traversing *O(n)* guests finds matching hosts in *O(n log m)* time.
+
+Overall makespan is *O(n)* weeks. Code precedes complete analysis here, but with randomized per-week pool order we observe no more than factor of two times church population. For larger *n*s and *m*s we tend towards one times church population.
+
+Chapter 11, Problem 5 (pg. 635) in the Kleinberg and Tardos book suggests a component of a better analysis: load balancing a lot of small jobs will narrow approximation bounds, as potential disparity in load size will become an increasingly small fraction of load size.
+
+### Challenges
+
+- We enjoyed learning more about Python, even though pylint frowns at our tabs and variable names.
+
+- When listing members per-week in a pool, random shuffling resulted in the best makespan statistics, beating numerous ideas with priority queue formulae or deque stacking. Intuitively and speculatively, noise introduced by shuffling may free probabilistic expectations about new edges formed per week from something like intermodulation effects between weeks.
+
+- In the hottest path of the algorithm, we ask: _given a guest, which (if any) of *m* hosts prefers to host them?_ We use a tree to answer this question in *O(log m)* rather than *O(m)* time. Using bitwise tricks lets us build the tree in *O(m log m)* rather than *O(nm log m)* time. Eventually, an assumption of constant time bitwise union eventually breaks down because filter state is maintined in *O(n)* bits. Along these lines, we're intrigued by 'sketch' data structures, like Bloom filters, that offer a sense of configurable, tunable complexity in larger-n contexts.
+
+- Reminiscent of deadlocks and resource contention, the algorithm would not terminate if, when selecting hosts, less than *m* remaining hosts were unable to host each other. Reflecting on Floyd's cycle detection algorithm was useful here.
+
+- Group size balance is approximate. Infrequently (in cases, unavoidably), a couple has to be scheduled under constraints requiring a maximum difference amongst group sizes of two rather than one. Similarly, we don't schedule group sizes smaller than 4.
+
+- Additional reflections on challenges and solutions are included in source code comments.
