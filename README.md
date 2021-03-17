@@ -49,6 +49,9 @@ generates a .png representation of the solution. The visualization uses dashed l
 
 A quick gallery:
 
+- slides
 ![ slides ]( slides.png?raw=true )
+- simple
 ![ simple ]( simple.png?raw=true )
+- textbook
 ![ textbook ]( textbook.png?raw=true )
