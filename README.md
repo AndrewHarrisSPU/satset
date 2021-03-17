@@ -49,13 +49,21 @@ generates a .png representation of the solution. The visualization uses dashed l
 
 A quick gallery:
 
-- slides:
+- slides1 (CSC3430-NP slides, 35-37)
+```
+~x1 | x2 | x3
+~x2 | x1 | x3
+~x1 | x2 | x4
+```
+![ slides1 ]( slides1.png?raw=true )
+
+- slides2 ( CSC3430-NP slides, 38-40)
 ```
 (  x1 | ~x1 | ~x2 ) &
 (  x3 |  x2 |  x4 ) &
 ( ~x1 | ~x3 | ~x4 )
 ```
-![ slides ]( slides.png?raw=true )
+![ slides2 ]( slides2.png?raw=true )
 
 - simple
 ```
@@ -64,7 +72,7 @@ x1 | x2 | x3
 ```
 ![ simple ]( simple.png?raw=true )
 
-- textbook
+- textbook (Given in Kleinberg and Tardos, pg. 461)
 ```
 v11 | v12 | v13
 v21 | v22 | v23
