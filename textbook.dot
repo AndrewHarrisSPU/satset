@@ -27,10 +27,10 @@ strict graph {
 	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~v23"
 	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~vk1"
 	"~v23" -- "~vk1" [ style = dotted ]
+	" v13" -- "~v13" [ style = dotted ]
+	" v11" -- "~v11" [ style = dotted ]
+	" v23" -- "~v23" [ style = dotted ]
 	" v21" -- "~v21" [ style = dotted ]
 	" vk3" -- "~vk3" [ style = dotted ]
-	" v11" -- "~v11" [ style = dotted ]
-	" v13" -- "~v13" [ style = dotted ]
-	" v23" -- "~v23" [ style = dotted ]
 	" vk1" -- "~vk1" [ style = dotted ]
 }

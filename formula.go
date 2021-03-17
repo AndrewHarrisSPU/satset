@@ -6,12 +6,16 @@ import (
 	"time"
 )
 
+func init() {
+	rand.Seed( time.Now().UnixNano() )
+}
+
 // DEFINITIONS
 // A CNF formula is a collection of clauses
 type formula struct {
-	k		int
-	bits 	map[ string ]bool
-	cs		[]clause
+	solution	map[ term ]struct{}
+	literal 	map[ string ]bool
+	cs			[]clause
 }
 
 // a clause is collection of (hopefully 2 or 3) terms
@@ -23,44 +27,64 @@ type term struct {
 	valence	bool
 }
 
-// "remarkably simple" (Kleinberg and Tardos, pg.725)
-func ( f *formula ) solve( k int ) {
-	rand.Seed( time.Now().UnixNano() )
+// Copy will point to same clauses, but new literals
+func ( f formula ) copy() formula {
+	solution := make( map[ term ]struct{} )
+	literal := make( map[ string ]bool )
+	for label := range f.literal {
+		literal[ label ] = false
+	}
 
-	f.k = k + 1
-	for !f.eval() || f.k != k {
-		fmt.Printf( "f.k: %d\n", f.k )
-		for i := range f.bits {
-			// fmt.Printf( "%s: %v\n", k, f.bits[ k ])
-			f.bits[ i ] = rand.Int() % 2 == 0
-		}
-	} 
-
-	fmt.Println( f )
-
-	fmt.Println( "solution:" )
-	for i, v := range f.bits {
-		fmt.Printf( "\t%s: %v\n", i, v )
+	return formula{
+		solution: solution,
+		literal: literal,
+		cs: f.cs,
 	}
 }
 
+// We just flip bits until we're satisfied ... Could be a long time. Or forever.
+// "remarkably simple" (Kleinberg and Tardos, pg.725)
+func ( f *formula ) solve( k int, result chan *formula ) {
+	// while we don't evaluate true, or we don't have a k-ary solution
+	for !f.eval( k ){
+		f.solution = make( map[ term ]struct{} )
+		// flip the bits
+		for i := range f.literal {
+			f.literal[ i ] = rand.Int() % 2 == 0
+		}
+	}
+
+	result <- f
+}
+
 // Working in CNF, the formula is the AND of all clauses
-func ( f *formula ) eval() bool {
-	f.k = 0
+// bits aren't mutated here, just evaluated
+func ( f *formula ) eval( k int ) bool {
+	// per clause
 	for _, c := range f.cs {
-		result := false
+		evalClause := false
+		// per term
 		for _, t := range c {
-			literal := f.bits[ t.label ]
-			eval := literal == t.valence
-			result = result || eval
-			if len( c ) == 3 && eval {
-				f.k += 1
+			evalTerm := f.literal[ t.label ] == t.valence
+			// if the literal bit  term matches the valence of the term
+			if evalTerm {
+				// Only counting the length-3 clauses as 'real' ...
+				if len( c ) == 3 && !evalClause {
+					f.solution[ t ] = struct{}{}
+				}
+				// this whole clause is true
+				evalClause = evalClause || true
 			}
 		}
-		if !result {
-			fmt.Println( c )
+
+		// no true terms
+		if !evalClause {
 			return false
 		}
+	}
+
+	if !( len( f.solution ) == k ) && k != 0 {
+		return false
 	}
 
 	return true
@@ -77,9 +101,15 @@ func ( f formula ) dot() string {
 
 			var color, fontcolor, pos, style string = "color = black", "", "", ""
 
-			if f.bits[ t.label ] == t.valence {
+			if _, ok := f.solution[ t ]; ok {
 				color = "color = red"
 			}
+
+			// for _, st := range f.solution {
+			// 	if t == st {
+			// 		color = "color = red"
+			// 	}
+			// }
 
 			if len( c ) == 2 {
 				color = "color = gray"
@@ -101,27 +131,30 @@ func ( f formula ) dot() string {
 	}
 
 	// the tricky part ...
-	for label := range f.bits {
+	for label := range f.literal {
 		pos, neg := "", ""
 		for _, c := range f.cs {
+			foundPos, foundNeg := false, false
 			for _, t := range c {
 				if t.label == label {
 					if t.valence {
-						pos = " " + label
+						foundPos = true
 					} else {
-						neg = "~" + label
+						foundNeg = true
 					}
 				}
+			}
+			if foundPos && !foundNeg {
+				pos = " " + label
+			}
+			if !foundPos && foundNeg {
+				neg = "~" + label
 			}
 		}
 		if pos != "" && neg != "" {
 			out += fmt.Sprintf( "\t\"%s\" -- \"%s\" [ style = dotted ]\n", pos, neg )
 		}
 	}
-
-	// for _, e := range E {
-	// 	out += fmt.Sprintf( "\t\"%s\" -- \"%s\"\n", e[ 0 ], e[ 1 ])
-	// }
 
 	out += "}"
 
@@ -134,6 +167,7 @@ func ( f formula ) String() string {
 	for _, c := range f.cs {
 		out += fmt.Sprintf( "%s &\n", c )
 	}
+	out = out[ : len( out ) - 2 ]
 	return out
 }
 
@@ -142,7 +176,7 @@ func ( c clause ) String() string {
 	for _, t := range c {
 		out += fmt.Sprintf( "%s | ", t )
 	}
-	// out = out[ : len( out ) - 3 ] + " ) &"
+	out = out[ : len( out ) - 3 ] + " )"
 	return out
 }
 

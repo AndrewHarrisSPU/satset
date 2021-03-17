@@ -7,22 +7,30 @@ import (
 )
 
 
-func ReadFormula( r io.Reader ) formula {
+func scanFormula( r io.Reader ) formula {
 	var f formula
-	f.bits = make( map[ string ]bool )
+	f.literal = make( map[ string ]bool )
 
 	scanner := bufio.NewScanner( r )
 	for scanner.Scan() {
-		c := ReadClause( strings.NewReader( scanner.Text() ), f.bits )
+		c := scanClause( strings.NewReader( scanner.Text() ), f.literal )
 		if len( c ) > 0 {
 			f.cs = append( f.cs, c )
 		}
 	}
 
+	out := ( "solving for: " )
+
+	for label := range f.literal {
+		out += " " + label
+	}
+
+	println( out )
+
 	return f
 }
 
-func ReadClause( r io.Reader, vars map[ string ]bool ) clause {
+func scanClause( r io.Reader, vars map[ string ]bool ) clause {
 	var c clause
 
 	scanner := bufio.NewScanner( r )
