@@ -38,9 +38,9 @@ Usage of ./satset:
 ```
 
 ## How it works:
-Randomly flipping bits turns out to be a decent enough way to approximate 3-SAT. One might expect 7/8ths of clauses satisfied, but it doesn't necessarily make the remaining 1/8th of the way easier.
+Randomly flipping bits turns out to be a decent enough way to approximate 3-SAT. One might expect 7/8ths of clauses satisfied, but it doesn't necessarily make the remaining 1/8th of the way easier. 3-SAT is in many ways about to encoding constraints, so solving the last 1/8th means mucking with the first 7/8ths.
 
-Gratuitously, this solver it fires off one hundred go routines to get multiple cores fired up, so I could say this is a parallel SAT solver. Some light skimming of things at [ satcompetition.org ]( http://www.satcompetition.org ) suggests that, perhaps unsurprisingly but still impressively, the best solvers are thinking very precisely about 'bare metal' communications overhead on CPUs and how that relates to algorithm design. The larger point is that SAT solvers are 
+Gratuitously, this solver it fires off one hundred go routines to get multiple cores fired up, so I could say this is a parallel SAT solver. Some light skimming of things at [ satcompetition.org ]( http://www.satcompetition.org ) suggests that, perhaps unsurprisingly but still impressively, the best solvers are thinking very precisely about 'bare metal' communications overhead on CPUs and how that relates to algorithm design.
 
 ## Experiment: dot and Graphviz
 Solutions may emit a .dot file, which can be rendered to a .png image or .svg asset with the `dot` tool (part of [ Graphviz ]( https://graphviz.org )). For example, after `satset` has found a solution:
