@@ -1,23 +1,33 @@
 strict graph {
 	rankdir = LR;
-	node [ color = black    ] "~x1"
-	node [ color = black    ] " x2"
-	node [ color = red    ] " x3"
-	"~x1" -- " x2"
-	" x2" -- " x3"
-	" x3" -- "~x1"
-	node [ color = red    ] "~x2"
-	node [ color = black    ] " x1"
-	node [ color = red    ] " x3"
-	"~x2" -- " x1"
-	" x1" -- " x3"
-	" x3" -- "~x2"
-	node [ color = black    ] "~x1"
-	node [ color = black    ] " x2"
-	node [ color = red    ] " x4"
-	"~x1" -- " x2"
-	" x2" -- " x4"
-	" x4" -- "~x1"
-	" x2" -- "~x2" [ style = dotted ]
-	" x1" -- "~x1" [ style = dotted ]
+	node [ color = red    ] "~x11"
+	node [ color = black    ] " x21"
+	node [ color = black    ] " x31"
+	"~x11" -- " x21"
+	" x21" -- " x31"
+	" x31" -- "~x11"
+	node [ color = red    ] "~x22"
+	node [ color = black    ] " x12"
+	node [ color = black    ] " x32"
+	"~x22" -- " x12"
+	" x12" -- " x32"
+	" x32" -- "~x22"
+	node [ color = red    ] "~x13"
+	node [ color = black    ] " x23"
+	node [ color = black    ] " x43"
+	"~x13" -- " x23"
+	" x23" -- " x43"
+	" x43" -- "~x13"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x11"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] " x12"
+	"~x11" -- " x12" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x13"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] " x12"
+	"~x13" -- " x12" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] " x21"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x22"
+	" x21" -- "~x22" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] " x23"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x22"
+	" x23" -- "~x22" [ style = dotted ]
 }
