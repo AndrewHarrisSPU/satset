@@ -50,10 +50,28 @@ generates a .png representation of the solution. The visualization uses dashed l
 A quick gallery:
 
 - slides:
+```
+(  x1 | ~x1 | ~x2 ) &
+(  x3 |  x2 |  x4 ) &
+( ~x1 | ~x3 | ~x4 )
+```
 ![ slides ]( slides.png?raw=true )
 
 - simple
+```
+x1 | x2 | x3
+~x1 | x5 | x6
+```
 ![ simple ]( simple.png?raw=true )
 
 - textbook
+```
+v11 | v12 | v13
+v21 | v22 | v23
+vk1 | vk2 | vk3
+
+~v11 | ~v21
+~v13 | ~vk3
+~v23 | ~vk1
+```
 ![ textbook ]( textbook.png?raw=true )
