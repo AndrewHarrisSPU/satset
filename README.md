@@ -16,7 +16,7 @@ solving for:  vk2 v12 v13 v21 vk1 v11 v22 v23 vk3
 stumped!
 ```
 
-We can try a bigger 'k':
+We'll have to try a bigger 'k':
 ```
 ./satset -input textbook.txt -k 3 -s 10 -dot
 solving for:  v11 v12 v13 v21 vk3 v22 v23 vk1 vk2
@@ -37,13 +37,18 @@ Usage of ./satset:
     	how many seconds before giving up (default 1)
 ```
 
-## dot and Graphviz
-Solutions may emit a .dot file, which can be rendered to a .png image or .svg asset with the `dot` tool (part of [ Graphviz ]( https://graphviz.org )). 
+## How it works:
+Randomly flipping bits, which turns out to be a decent enough way to approximate 3-SAT. Gratuitously, it fires off a hundred go routines to get multiple cores fired up, so I could say this is a parallel SAT solver. (Some light skimming of things at [ satcompetition.org ]( http://www.satcompetition.org ) suggests that, perhaps unsurprisingly but still impressively, the best solvers are thinking very precisely about 'bare metal' communications overhead on CPUs and how that relates to algorithm design.)
 
-I'm not sure this is entirely robust. The visualization uses dashed lines to represent contradictions and red circles to indicate parts of a solution set.
+## Experiment: dot and Graphviz
+Solutions may emit a .dot file, which can be rendered to a .png image or .svg asset with the `dot` tool (part of [ Graphviz ]( https://graphviz.org )). For example, after `satset` has found a solution:
+```
+dot -Tpng textbook.dot -o textbook.png
+```
+generates a .png representation of the solution. The visualization uses dashed lines to represent contradictions and red circles to indicate parts of a solution set.
 
 A quick gallery:
 
-[ slides ]( slides.png )
-[ simple ]( simple.png )
-[ textbook ]( textbook.png )
+[ slides ]( slides.png?raw=true )
+[ simple ]( simple.png?raw=true )
+[ textbook ]( textbook.png?raw=true )

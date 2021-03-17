@@ -52,7 +52,7 @@ func Load( path string ) formula {
 	return scanFormula( fin )
 }
 
-func Dot( path string, f formula ) {
+func Dot( path string, f *formula ) {
 	base := strings.TrimSuffix( path, filepath.Ext( path ))
 	fout, err := os.Create( base + ".dot" )
 	if err != nil {
