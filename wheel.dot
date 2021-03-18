@@ -1,0 +1,48 @@
+strict graph {
+	rankdir = LR;
+	node [ color = red    ] " x1"
+	node [ color = black    ] " x2"
+	node [ color = black    ] " x3"
+	" x1" -- " x2"
+	" x2" -- " x3"
+	" x3" -- " x1"
+	node [ color = black    ] " x4"
+	node [ color = red    ] " x5"
+	node [ color = black    ] " x6"
+	" x4" -- " x5"
+	" x5" -- " x6"
+	" x6" -- " x4"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x1"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x2"
+	"~x1" -- "~x2" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x1"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x4"
+	"~x1" -- "~x4" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x1"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x6"
+	"~x1" -- "~x6" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x3"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x2"
+	"~x3" -- "~x2" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x3"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x4"
+	"~x3" -- "~x4" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x3"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x6"
+	"~x3" -- "~x6" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x5"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x2"
+	"~x5" -- "~x2" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x5"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x4"
+	"~x5" -- "~x4" [ style = dotted ]
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x5"
+	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~x6"
+	"~x5" -- "~x6" [ style = dotted ]
+	" x3" -- "~x3" [ style = dotted ]
+	" x4" -- "~x4" [ style = dotted ]
+	" x5" -- "~x5" [ style = dotted ]
+	" x6" -- "~x6" [ style = dotted ]
+	" x1" -- "~x1" [ style = dotted ]
+	" x2" -- "~x2" [ style = dotted ]
+}

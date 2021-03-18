@@ -42,7 +42,6 @@ func main() {
 }
 
 func Load( path string ) formula {
-	// File IO
 	fin, err := os.Open( path )
 	if err != nil {
 		panic( err )

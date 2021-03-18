@@ -11,8 +11,8 @@ func init() {
 }
 
 // TYPES
-
 // A CNF formula is a collection of clauses
+// The map to booleans is suboptimal
 type formula struct {
 	k			int
 	solution	map[ term ]struct{}
@@ -95,7 +95,6 @@ func ( f *formula ) eval() bool {
 }
 
 // DOT
-
 // We can emit G = ( V, E ) as a dot file ...
 func ( f formula ) dot() string {
 	out := "strict graph {\n\trankdir = LR;\n"

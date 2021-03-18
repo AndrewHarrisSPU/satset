@@ -5,7 +5,7 @@
 # satset
 
 ## How to build it:
-From the repository directory, with Go installed and available :
+From the repository directory, with Go installed and available:
 ```
 go build
 ```
@@ -47,9 +47,9 @@ Reducing to Independent Set, 3-SAT clauses are converted to to 3-vertex, 3-edge 
 
 Solving 3-SAT approximately is "remarkably simple" (Kleinberg and Tardos, pg.725). Simple means simple: just flip the bits randomly. Gratuitously, this program sends off one hundred go routines (fire up the cores!) to flip their own bits, so it's even simple in parallel. (In the larger scale, the first 7/8ths are simple, but the last 1/8th isn't, and solving the last 1/8th might unsolve the first 7/8ths ...)
 
-To solve this Independent Set problem, we can insist on one satisfied term per clause.
+To solve this Independent Set problem, we can flip bits and insist on one satisfied term per clause.
 
-## Experimentally, using dot and Graphviz to visualize solutions
+# Experiment using dot and Graphviz to visualize solutions
 Solutions may emit a .dot file, which can be rendered to a .png image or .svg asset with the `dot` tool (part of [ Graphviz ]( https://graphviz.org )). For example, after `satset` has found a solution:
 ```
 dot -Tpng textbook.dot -o textbook.png
