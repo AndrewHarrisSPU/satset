@@ -12,20 +12,20 @@ import (
 func main() {
 	// FLAGS
 	var path = flag.String( "input", "", "a plaintext file containing a list of terms in CNF" )
-	var k = flag.Int( "k", -1, "solve for k terms evaluating true. 0 for anything that solves." )
-	var seconds = flag.Int( "s", 1, "how many seconds before giving up" )
-	var dot = flag.Bool( "dot", false, "write a .dot file of the solution. OPTIONAL" )
+	var seconds = flag.Int( "seconds", 1, "how many seconds before giving up" )
+	var dot = flag.Bool( "dot", false, "write a .dot file of the solution (experimental)" )
 	flag.Parse()
 
-	if *path == "" || *k == -1 {
-		fmt.Println( "Missing or invalid arguments. Please try: satset --help" )
+	if *path == "" {
+		fmt.Println( "Please use -input to specify an input file. See --help for full options." )
 		return
 	}
 
 	problem := Load( *path )
-	result := Solve( problem, *k, *seconds )
+	result := Solve( problem, *seconds )
 
 	if result != nil {
+		fmt.Println( result )
 		// write solution to console
 		for t := range result.solution {
 			fmt.Printf( "%s: %v\n", t, result.literal[ t.label ])
@@ -63,15 +63,15 @@ func Dot( path string, f *formula ) {
 	fout.WriteString( f.dot() )
 }
 
-func Solve( problem formula, k int, seconds int ) *formula {
+func Solve( problem formula, seconds int ) *formula {
 	// channel with solution status
 	// we will pass a correct solution, or nil
 	done := make( chan *formula )
 
 	// spin up enough solvers for the runtime scheduler to work with
 	for i := 0; i < 100; i++ {
-		solver := problem.copy()
-		go solver.solve( k, done )
+		solver := problem.freshBits()
+		go solver.solve( done )
 	}
 
 	// put a limit on it ...

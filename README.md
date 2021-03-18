@@ -1,7 +1,11 @@
+# YouTube
+
+[![YouTube](https://img.youtube.com/vi/XdQCL0HmNL4/0.jpg)](https://www.youtube.com/watch?v=XdQCL0HmNL4)
+
 # satset
 
 ## How to build it:
-No external dependencies were used. From the repository directory, with Go installed:
+From the repository directory, with Go installed and available :
 ```
 go build
 ```
@@ -9,45 +13,48 @@ generates the executable `satset`.
 
 ## How to run it:
 
-To demonstrate solving an independent set problem:
+After building, and from the repository directory (ensuring the presence of `satset` and `textbook.txt`, taken from Kleinberg and Tardos), the following command solves a 3-SAT problem, for one term per clause:
 ```
-./satset -input textbook.txt -k 2 -s 10 -dot
-solving for:  vk2 v12 v13 v21 vk1 v11 v22 v23 vk3
-stumped!
-```
-
-We'll have to try a bigger 'k':
-```
-./satset -input textbook.txt -k 3 -s 10 -dot
-solving for:  v11 v12 v13 v21 vk3 v22 v23 vk1 vk2
- vk2: true
+./satset -input textbook.txt
+(  v11 |  v12 |  v13 ) &
+(  v21 |  v22 |  v23 ) &
+(  vk1 |  vk2 |  vk3 ) &
+( ~v11 | ~v21 ) &
+( ~v13 | ~vk3 ) &
+( ~v23 | ~vk1 )
  v11: true
  v22: true
+ vk1: true
 ```
+
+## satset --help
 
 ```
 Usage of ./satset:
   -dot
-    	write a .dot file of the solution. OPTIONAL
+    	write a .dot file of the solution (experimental)
   -input string
     	a plaintext file containing a list of terms in CNF
-  -k int
-    	solve for k terms evaluating true. 0 for anything that solves. (default -1)
-  -s int
+  -seconds int
     	how many seconds before giving up (default 1)
 ```
 
+# Reduction to Independent Set
+
 ## How it works:
-Randomly flipping bits turns out to be a decent enough way to approximate 3-SAT. One might expect 7/8ths of clauses satisfied, but it doesn't necessarily make the remaining 1/8th of the way easier. 3-SAT is in many ways about to encoding constraints, so solving the last 1/8th means mucking with the first 7/8ths.
 
-Gratuitously, this solver it fires off one hundred go routines to get multiple cores fired up, so I could say this is a parallel SAT solver. Some light skimming of things at [ satcompetition.org ]( http://www.satcompetition.org ) suggests that, perhaps unsurprisingly but still impressively, the best solvers are thinking very precisely about 'bare metal' communications overhead on CPUs and how that relates to algorithm design.
+Reducing to Independent Set, 3-SAT clauses are converted to to 3-vertex, 3-edge triangles and additional constraint edges. This is a polynomial-time conversion - with *n* vertices, we couldn't have more than *O(n^2)* edges.
 
-## Experiment: dot and Graphviz
+Solving 3-SAT approximately is "remarkably simple" (Kleinberg and Tardos, pg.725). Simple means simple: just flip the bits randomly. Gratuitously, this program sends off one hundred go routines (fire up the cores!) to flip their own bits, so it's even simple in parallel. (In the larger scale, the first 7/8ths are simple, but the last 1/8th isn't, and solving the last 1/8th might unsolve the first 7/8ths ...)
+
+To solve this Independent Set problem, we can insist on one satisfied term per clause.
+
+## Experimentally, using dot and Graphviz to visualize solutions
 Solutions may emit a .dot file, which can be rendered to a .png image or .svg asset with the `dot` tool (part of [ Graphviz ]( https://graphviz.org )). For example, after `satset` has found a solution:
 ```
 dot -Tpng textbook.dot -o textbook.png
 ```
-generates a .png representation of the solution. The visualization uses dashed lines to represent contradictions and red circles to indicate parts of a solution set. (Dashed lines are more naturally encoded with length 2 clauses, but this is still 3-SAT.)
+generates a .png representation of the solution. The visualization red circles to indicate parts of a solution set. Dashed lines represent a contradiction, and a contradiction may run through a few steps.
 
 A quick gallery:
 

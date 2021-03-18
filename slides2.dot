@@ -1,7 +1,7 @@
 strict graph {
 	rankdir = LR;
-	node [ color = red    ] " x11"
-	node [ color = black    ] "~x11"
+	node [ color = black    ] " x11"
+	node [ color = red    ] "~x11"
 	node [ color = black    ] "~x21"
 	" x11" -- "~x11"
 	"~x11" -- "~x21"
@@ -12,8 +12,8 @@ strict graph {
 	" x32" -- " x22"
 	" x22" -- " x42"
 	" x42" -- " x32"
-	node [ color = black    ] "~x13"
-	node [ color = red    ] "~x33"
+	node [ color = red    ] "~x13"
+	node [ color = black    ] "~x33"
 	node [ color = black    ] "~x43"
 	"~x13" -- "~x33"
 	"~x33" -- "~x43"

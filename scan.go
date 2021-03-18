@@ -6,36 +6,33 @@ import (
 	"strings"
 )
 
-
 func scanFormula( r io.Reader ) formula {
 	var f formula
 	f.literal = make( map[ string ]bool )
 
+	// scan lines
 	scanner := bufio.NewScanner( r )
 	for scanner.Scan() {
+		// scan each line as a clause
 		c := scanClause( strings.NewReader( scanner.Text() ), f.literal )
 		if len( c ) > 0 {
 			f.cs = append( f.cs, c )
 		}
+		// length-2 constraint edges don't contribute to Independent Set
+		if len( c ) == 3 {
+			f.k += 1
+		}
 	}
-
-	out := ( "solving for: " )
-
-	for label := range f.literal {
-		out += " " + label
-	}
-
-	println( out )
 
 	return f
 }
 
+// Gets the job done. Not pretty.
 func scanClause( r io.Reader, vars map[ string ]bool ) clause {
 	var c clause
 
 	scanner := bufio.NewScanner( r )
 	scanner.Split( termScan )
-
 	for scanner.Scan() {
 		// scan a term
 		label := scanner.Text()

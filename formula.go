@@ -10,9 +10,11 @@ func init() {
 	rand.Seed( time.Now().UnixNano() )
 }
 
-// DEFINITIONS
+// TYPES
+
 // A CNF formula is a collection of clauses
 type formula struct {
+	k			int
 	solution	map[ term ]struct{}
 	literal 	map[ string ]bool
 	cs			[]clause
@@ -28,7 +30,7 @@ type term struct {
 }
 
 // Copy will point to same clauses, but new literals
-func ( f formula ) copy() formula {
+func ( f formula ) freshBits() formula {
 	solution := make( map[ term ]struct{} )
 	literal := make( map[ string ]bool )
 	for label := range f.literal {
@@ -36,17 +38,19 @@ func ( f formula ) copy() formula {
 	}
 
 	return formula{
+		k: f.k,
 		solution: solution,
 		literal: literal,
 		cs: f.cs,
 	}
 }
 
+// LOGIC
 // We just flip bits until we're satisfied ... Could be a long time. Or forever.
 // "remarkably simple" (Kleinberg and Tardos, pg.725)
-func ( f *formula ) solve( k int, result chan *formula ) {
+func ( f *formula ) solve( result chan *formula ) {
 	// while we don't evaluate true, or we don't have a k-ary solution
-	for !f.eval( k ){
+	for !f.eval(){
 		f.solution = make( map[ term ]struct{} )
 		// flip the bits
 		for i := range f.literal {
@@ -59,7 +63,7 @@ func ( f *formula ) solve( k int, result chan *formula ) {
 
 // Working in CNF, the formula is the AND of all clauses
 // bits aren't mutated here, just evaluated
-func ( f *formula ) eval( k int ) bool {
+func ( f *formula ) eval() bool {
 	// per clause
 	for _, c := range f.cs {
 		evalClause := false
@@ -83,12 +87,14 @@ func ( f *formula ) eval( k int ) bool {
 		}
 	}
 
-	if !( len( f.solution ) == k ) && k != 0 {
+	if !( len( f.solution ) == f.k ) {
 		return false
 	}
 
 	return true
 }
+
+// DOT
 
 // We can emit G = ( V, E ) as a dot file ...
 func ( f formula ) dot() string {
@@ -104,12 +110,6 @@ func ( f formula ) dot() string {
 			if _, ok := f.solution[ t ]; ok {
 				color = "color = red"
 			}
-
-			// for _, st := range f.solution {
-			// 	if t == st {
-			// 		color = "color = red"
-			// 	}
-			// }
 
 			if len( c ) == 2 {
 				color = "color = gray"

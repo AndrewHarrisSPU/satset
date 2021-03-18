@@ -1,20 +1,20 @@
 strict graph {
 	rankdir = LR;
-	node [ color = black    ] " v11"
+	node [ color = red    ] " v11"
 	node [ color = black    ] " v12"
-	node [ color = red    ] " v13"
+	node [ color = black    ] " v13"
 	" v11" -- " v12"
 	" v12" -- " v13"
 	" v13" -- " v11"
-	node [ color = red    ] " v21"
-	node [ color = black    ] " v22"
+	node [ color = black    ] " v21"
+	node [ color = red    ] " v22"
 	node [ color = black    ] " v23"
 	" v21" -- " v22"
 	" v22" -- " v23"
 	" v23" -- " v21"
 	node [ color = black    ] " vk1"
-	node [ color = red    ] " vk2"
-	node [ color = black    ] " vk3"
+	node [ color = black    ] " vk2"
+	node [ color = red    ] " vk3"
 	" vk1" -- " vk2"
 	" vk2" -- " vk3"
 	" vk3" -- " vk1"
@@ -27,10 +27,10 @@ strict graph {
 	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~v23"
 	node [ color = gray fontcolor = gray pos = "-10,0!" style = dotted ] "~vk1"
 	"~v23" -- "~vk1" [ style = dotted ]
-	" v23" -- "~v23" [ style = dotted ]
-	" v11" -- "~v11" [ style = dotted ]
 	" v13" -- "~v13" [ style = dotted ]
-	" vk3" -- "~vk3" [ style = dotted ]
-	" vk1" -- "~vk1" [ style = dotted ]
 	" v21" -- "~v21" [ style = dotted ]
+	" v23" -- "~v23" [ style = dotted ]
+	" vk1" -- "~vk1" [ style = dotted ]
+	" v11" -- "~v11" [ style = dotted ]
+	" vk3" -- "~vk3" [ style = dotted ]
 }
